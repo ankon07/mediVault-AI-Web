@@ -7,13 +7,16 @@ import { CONTENT } from './constants';
 import { 
   ArrowRight, ChevronDown, Check, Briefcase, 
   FileText, Microscope, Pill, Activity, Calendar, Lock,
-  X, Send, CheckCircle, Gift, AlertCircle
+  X, Send, CheckCircle, Gift, AlertCircle, Download
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Email configuration - using Formsubmit.co (free, no API key required)
 // First submission will require email verification (one-time)
 const RECIPIENT_EMAIL = 'ankonahamed@gmail.com';
+
+// APK Download URL
+const APK_DOWNLOAD_URL = 'https://github.com/ankon07/medvault-ai/releases/download/v1.0.2/medivault-ai.apk';
 
 function App() {
   const [activeSection, setActiveSection] = useState(0);
@@ -537,13 +540,16 @@ function App() {
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-teal-500 to-transparent opacity-50"></div>
           <div className="container mx-auto px-6 text-center relative z-10">
             <h2 className="text-4xl md:text-6xl font-bold mb-8">Take control of your health data.</h2>
-            <div className="flex justify-center gap-4 mb-12 flex-col sm:flex-row items-center">
-               <button 
-                  onClick={() => setIsWishlistOpen(true)}
-                  className="px-8 py-4 bg-white text-teal-900 font-bold rounded-full hover:bg-teal-50 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center"
+            <div className="flex justify-center gap-4 mb-8 flex-col sm:flex-row items-center">
+               <a 
+                  href={APK_DOWNLOAD_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-white text-teal-900 font-bold rounded-full hover:bg-teal-50 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center group"
                >
-                 Get Early Access
-               </button>
+                 <Download size={20} className="group-hover:animate-bounce" />
+                 Download APK
+               </a>
                <button 
                   onClick={() => setIsWishlistOpen(true)}
                   className="px-8 py-4 border border-teal-500/30 text-white font-bold rounded-full hover:bg-teal-500/10 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center"
@@ -551,6 +557,10 @@ function App() {
                  Join Waitlist
                </button>
             </div>
+            
+            <p className="text-slate-400 text-sm mb-8">
+              Version 1.0.2 • Android APK • ~25MB
+            </p>
             
             <div className="flex flex-wrap justify-center gap-3">
               <span className="px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-sm font-medium">
