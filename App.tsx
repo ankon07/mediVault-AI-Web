@@ -18,6 +18,129 @@ const RECIPIENT_EMAIL = 'ankonahamed@gmail.com';
 // APK Download URL
 const APK_DOWNLOAD_URL = 'https://github.com/ankon07/medvault-ai/releases/download/v1.0.2/medivault-ai.apk';
 
+// App Screenshots for the carousel
+const APP_SCREENSHOTS = [
+  '/images/Screenshot_2025-12-02-01-45-24-22_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-45-32-86_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-45-40-98_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-45-59-22_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-46-02-66_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-46-07-20_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-46-09-73_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-46-12-91_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-46-21-05_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-46-25-27_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-47-08-21_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-47-12-64_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-47-35-80_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-47-38-69_231b3b00131ed1acadb706f5a75af86c.jpg',
+  '/images/Screenshot_2025-12-02-01-47-47-76_231b3b00131ed1acadb706f5a75af86c.jpg',
+];
+
+// App Screenshot Carousel Component - Single Image Loop
+const AppScreenshotCarousel: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const totalImages = APP_SCREENSHOTS.length;
+
+  // Auto-advance carousel every 2 seconds in a loop
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [totalImages]);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? totalImages - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <div className="relative group">
+      {/* Progress Indicators */}
+      <div className="flex justify-center gap-1.5 mb-6 flex-wrap max-w-md mx-auto">
+        {APP_SCREENSHOTS.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              index === currentIndex 
+                ? 'w-6 bg-teal-500' 
+                : 'w-1.5 bg-slate-600 hover:bg-slate-500'
+            }`}
+            aria-label={`Go to image ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Single Image Carousel */}
+      <div className="relative overflow-hidden">
+        <div 
+          className="flex transition-transform duration-500 ease-out"
+          style={{ 
+            width: `${totalImages * 100}%`,
+            transform: `translateX(-${currentIndex * (100 / totalImages)}%)`
+          }}
+        >
+          {APP_SCREENSHOTS.map((screenshot, index) => (
+            <div 
+              key={index}
+              className="flex justify-center items-center px-4"
+              style={{ width: `${100 / totalImages}%` }}
+            >
+              <div className="relative w-64 sm:w-72 md:w-80 lg:w-96 rounded-3xl overflow-hidden border-2 border-slate-700/50 shadow-2xl shadow-teal-900/30 transition-all duration-300 hover:border-teal-500/50 hover:shadow-teal-500/20">
+                <img 
+                  src={screenshot} 
+                  alt={`App screenshot ${index + 1}`}
+                  className="w-full h-auto"
+                  draggable={false}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Left Navigation Arrow */}
+        <button 
+          onClick={goToPrevious}
+          className="absolute left-0 top-0 bottom-0 w-16 md:w-24 flex items-center justify-center z-20 text-white text-5xl md:text-6xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:text-teal-400"
+          style={{
+            background: 'linear-gradient(-90deg, rgba(0,0,0,0) 0%, rgba(15,23,42,0.9) 100%)'
+          }}
+          aria-label="Previous image"
+        >
+          ‹
+        </button>
+
+        {/* Right Navigation Arrow */}
+        <button 
+          onClick={goToNext}
+          className="absolute right-0 top-0 bottom-0 w-16 md:w-24 flex items-center justify-center z-20 text-white text-5xl md:text-6xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:text-teal-400"
+          style={{
+            background: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(15,23,42,0.9) 100%)'
+          }}
+          aria-label="Next image"
+        >
+          ›
+        </button>
+      </div>
+
+      {/* Image Counter */}
+      <div className="flex justify-center mt-6">
+        <span className="text-slate-400 text-sm font-medium">
+          <span className="text-teal-400">{String(currentIndex + 1).padStart(2, '0')}</span>
+          <span className="mx-2">/</span>
+          <span>{String(totalImages).padStart(2, '0')}</span>
+        </span>
+      </div>
+    </div>
+  );
+};
+
 function App() {
   const [activeSection, setActiveSection] = useState(0);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
@@ -508,30 +631,16 @@ function App() {
           </div>
         </section>
 
-        {/* Insights */}
+        {/* App Screenshots Gallery */}
         <section id="insights" className="py-32 bg-slate-900">
           <div className="container mx-auto px-6">
-            <div className="flex justify-between items-end mb-16">
-               <h2 className="text-4xl font-bold">Health Insights</h2>
-               <a href="#" className="hidden md:flex items-center gap-2 text-teal-400 hover:text-white transition-colors">
-                 View all articles <ArrowRight size={18} />
-               </a>
+            <div className="text-center mb-16">
+               <h2 className="text-4xl md:text-5xl font-bold mb-4">Experience MedVault AI</h2>
+               <p className="text-slate-400 text-lg max-w-2xl mx-auto">Swipe through to explore our intuitive interface designed to put your health data at your fingertips.</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {CONTENT.insights.map((item, i) => (
-                <div key={i} className="group cursor-pointer">
-                  <div className="aspect-[16/9] bg-slate-800 rounded-xl mb-6 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
-                    <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1 bg-slate-900/90 backdrop-blur text-xs font-bold uppercase tracking-wider rounded text-teal-400">{item.tag}</span>
-                    </div>
-                  </div>
-                  <p className="text-slate-500 text-sm mb-2">{item.date}</p>
-                  <h3 className="text-xl font-bold leading-tight group-hover:text-teal-400 transition-colors">{item.title}</h3>
-                </div>
-              ))}
-            </div>
+            {/* Swipeable Screenshot Gallery */}
+            <AppScreenshotCarousel />
           </div>
         </section>
 
