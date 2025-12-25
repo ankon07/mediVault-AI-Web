@@ -4,12 +4,13 @@ import Footer from './components/Footer';
 import ThreeBackground from './components/ThreeBackground';
 import FeaturesGallery from './components/FeaturesGallery';
 import { CONTENT } from './constants';
-import { 
-  ArrowRight, ChevronDown, Check, Briefcase, 
+import {
+  ArrowRight, ChevronDown, Check, Briefcase,
   FileText, Microscope, Pill, Activity, Calendar, Lock,
   X, Send, CheckCircle, Gift, AlertCircle, Download
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 // Email configuration - using Formsubmit.co (free, no API key required)
 // First submission will require email verification (one-time)
@@ -142,6 +143,7 @@ const AppScreenshotCarousel: React.FC = () => {
 };
 
 function App() {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState(0);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -149,12 +151,32 @@ function App() {
   const [userName, setUserName] = useState("");
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState("");
+  const [downloadCount, setDownloadCount] = useState<number | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
   
   // Refs for intersection observation
   const heroRef = useRef<HTMLDivElement>(null);
   const pillar1Ref = useRef<HTMLDivElement>(null);
   const pillar2Ref = useRef<HTMLDivElement>(null);
   const pillar3Ref = useRef<HTMLDivElement>(null);
+
+  // Fetch initial download count from localStorage
+  useEffect(() => {
+    const fetchDownloadCount = () => {
+      try {
+        // Get count from localStorage
+        const storedCount = localStorage.getItem('medivault-download-count');
+        const count = storedCount ? parseInt(storedCount, 10) : 0;
+        console.log('Download count loaded from localStorage:', count);
+        setDownloadCount(count);
+      } catch (error) {
+        console.error('Failed to fetch download count:', error);
+        setDownloadCount(0);
+      }
+    };
+
+    fetchDownloadCount();
+  }, []);
 
   useEffect(() => {
     const options = { threshold: 0.5 };
@@ -230,6 +252,35 @@ function App() {
     setTimeout(() => setFormStatus('idle'), 500);
   };
 
+  // Handle download click and increment counter
+  const handleDownloadClick = () => {
+    if (isDownloading) return;
+    
+    setIsDownloading(true);
+    
+    try {
+      // Increment the download counter in localStorage
+      const currentCount = downloadCount || 0;
+      const newCount = currentCount + 1;
+      
+      // Save to localStorage
+      localStorage.setItem('medivault-download-count', newCount.toString());
+      console.log('Download count incremented:', newCount);
+      
+      // Update state
+      setDownloadCount(newCount);
+      
+      // Open download link
+      window.open(APK_DOWNLOAD_URL, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      console.error('Failed to update download count:', error);
+      // Still open the download link even if counter fails
+      window.open(APK_DOWNLOAD_URL, '_blank', 'noopener,noreferrer');
+    } finally {
+      setTimeout(() => setIsDownloading(false), 1000);
+    }
+  };
+
   // Helper to render dynamic icons based on the constant string
   const renderIcon = (iconName: string) => {
     switch (iconName) {
@@ -269,7 +320,7 @@ function App() {
 
   return (
     <div className="relative min-h-screen bg-slate-950 text-white selection:bg-teal-500/30">
-      <Navigation />
+      <Navigation downloadCount={downloadCount} onDownloadClick={handleDownloadClick} />
       
       {/* 3D Background - Fixed */}
       <ThreeBackground sectionIndex={activeSection} />
@@ -320,10 +371,10 @@ function App() {
                           <div className="w-16 h-16 bg-teal-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-teal-500">
                               <CheckCircle size={32} />
                           </div>
-                          <h3 className="text-2xl font-bold text-white mb-3">You're on the list!</h3>
-                          <p className="text-slate-400 mb-8">We've received your request. Check your inbox—we'll be sending the APK download link shortly.</p>
+                          <h3 className="text-2xl font-bold text-white mb-3">{t('wishlist.success.heading')}</h3>
+                          <p className="text-slate-400 mb-8">{t('wishlist.success.message')}</p>
                           <button onClick={closeWishlist} className="w-full py-3 bg-teal-500 text-slate-950 font-bold rounded-lg hover:bg-teal-400 transition-colors">
-                              Back to Site
+                              {t('wishlist.success.closeBtn')}
                           </button>
                       </motion.div>
                   ) : formStatus === 'error' ? (
@@ -336,20 +387,20 @@ function App() {
                           <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500">
                               <AlertCircle size={32} />
                           </div>
-                          <h3 className="text-2xl font-bold text-white mb-3">Oops! Something went wrong</h3>
+                          <h3 className="text-2xl font-bold text-white mb-3">{t('wishlist.error.heading')}</h3>
                           <p className="text-slate-400 mb-8">{errorMessage}</p>
                           <div className="space-y-3">
-                            <button 
-                              onClick={() => setFormStatus('idle')} 
+                            <button
+                              onClick={() => setFormStatus('idle')}
                               className="w-full py-3 bg-teal-500 text-slate-950 font-bold rounded-lg hover:bg-teal-400 transition-colors"
                             >
-                              Try Again
+                              {t('wishlist.error.tryAgainBtn')}
                             </button>
-                            <a 
-                              href="mailto:ankonahamed@gmail.com?subject=MedVault AI Early Access Request" 
+                            <a
+                              href="mailto:ankonahamed@gmail.com?subject=MedVault AI Early Access Request"
                               className="block w-full py-3 border border-slate-700 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors text-center"
                             >
-                              Email Us Directly
+                              {t('wishlist.error.emailDirectlyBtn')}
                             </a>
                           </div>
                       </motion.div>
@@ -364,36 +415,36 @@ function App() {
                               <div className="w-12 h-12 bg-teal-500/10 rounded-lg flex items-center justify-center mb-4 text-teal-500">
                                   <Gift size={24} />
                               </div>
-                              <h3 className="text-2xl font-bold text-white mb-2">Get Early Access</h3>
-                              <p className="text-slate-400">MedVault AI is currently in private beta. Join our wishlist to receive the latest APK build directly to your email.</p>
+                              <h3 className="text-2xl font-bold text-white mb-2">{t('wishlist.form.heading')}</h3>
+                              <p className="text-slate-400">{t('wishlist.form.description')}</p>
                           </div>
-                          
+
                           <form onSubmit={handleWishlistSubmit} className="space-y-4">
                               <div>
-                                  <label htmlFor="userName" className="block text-sm font-medium text-slate-400 mb-1.5">Your Name (Optional)</label>
-                                  <input 
-                                      type="text" 
+                                  <label htmlFor="userName" className="block text-sm font-medium text-slate-400 mb-1.5">{t('wishlist.form.nameLabel')}</label>
+                                  <input
+                                      type="text"
                                       id="userName"
                                       value={userName}
                                       onChange={(e) => setUserName(e.target.value)}
-                                      placeholder="John Doe"
+                                      placeholder={t('wishlist.form.namePlaceholder')}
                                       className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all placeholder:text-slate-600"
                                   />
                               </div>
                               <div>
-                                  <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-1.5">Email Address *</label>
-                                  <input 
-                                      type="email" 
+                                  <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-1.5">{t('wishlist.form.emailLabel')}</label>
+                                  <input
+                                      type="email"
                                       id="email"
                                       required
                                       value={email}
                                       onChange={(e) => setEmail(e.target.value)}
-                                      placeholder="name@example.com"
+                                      placeholder={t('wishlist.form.emailPlaceholder')}
                                       className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all placeholder:text-slate-600"
                                   />
                               </div>
-                              <button 
-                                  type="submit" 
+                              <button
+                                  type="submit"
                                   disabled={formStatus === 'submitting'}
                                   className="w-full py-3 bg-teal-500 text-slate-950 font-bold rounded-lg hover:bg-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
                               >
@@ -403,15 +454,15 @@ function App() {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                       </svg>
-                                      Sending...
+                                      {t('wishlist.form.submitting')}
                                     </span>
                                   ) : (
-                                    <span className="flex items-center gap-2">Send me the APK <Send size={16} /></span>
+                                    <span className="flex items-center gap-2">{t('wishlist.form.submitBtn')} <Send size={16} /></span>
                                   )}
                               </button>
                           </form>
                           <p className="mt-4 text-center text-xs text-slate-500">
-                            We respect your privacy. No spam, ever.
+                            {t('wishlist.form.privacy')}
                           </p>
                       </motion.div>
                   )}
@@ -429,9 +480,9 @@ function App() {
             <div className="max-w-4xl">
               
               <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-8 leading-[1.1]">
-                {CONTENT.hero.headline.split(',').map((line, lineIndex) => (
-                  <motion.span 
-                    key={lineIndex} 
+                {t(CONTENT.hero.headline).split(',').map((line, lineIndex) => (
+                  <motion.span
+                    key={lineIndex}
                     className="block"
                     custom={lineIndex}
                     initial="hidden"
@@ -450,34 +501,34 @@ function App() {
                   </motion.span>
                 ))}
               </h1>
-              
-              <motion.p 
+
+              <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
                 className="text-xl md:text-2xl text-slate-400 mb-10 max-w-2xl leading-relaxed"
               >
-                {CONTENT.hero.subhead}
+                {t(CONTENT.hero.subhead)}
               </motion.p>
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
                 className="flex flex-col sm:flex-row gap-4"
               >
-                <button 
+                <button
                   onClick={() => setIsWishlistOpen(true)}
                   className="px-8 py-4 bg-teal-500 text-slate-950 font-bold rounded-full hover:bg-teal-400 transition-colors flex items-center justify-center gap-2 group"
                 >
-                  {CONTENT.hero.primaryCta}
+                  {t(CONTENT.hero.primaryCta)}
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>
-                <button 
+                <button
                   onClick={() => setIsGalleryOpen(true)}
                   className="px-8 py-4 border border-slate-700 text-white font-medium rounded-full hover:bg-slate-800 transition-colors flex items-center justify-center"
                 >
-                  {CONTENT.hero.secondaryCta}
+                  {t(CONTENT.hero.secondaryCta)}
                 </button>
               </motion.div>
             </div>
@@ -524,38 +575,38 @@ function App() {
                     <span className="text-sm font-medium uppercase tracking-wider text-slate-300">Feature 0{index + 1}</span>
                   </motion.div>
                   
-                  <motion.h2 
+                  <motion.h2
                     variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
                     className="text-5xl md:text-7xl font-bold mb-6"
                   >
-                    {pillar.title}
+                    {t(pillar.title)}
                   </motion.h2>
-                  <motion.p 
+                  <motion.p
                     variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
                     className="text-2xl text-teal-400 mb-8 font-light"
                   >
-                    {pillar.subtitle}
+                    {t(pillar.subtitle)}
                   </motion.p>
-                  
+
                   <ul className="space-y-4 mb-10">
                     {pillar.description.map((item, i) => (
-                      <motion.li 
-                        key={i} 
+                      <motion.li
+                        key={i}
                         variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
                         className="flex items-start gap-3 text-lg text-slate-300"
                       >
                         <Check size={24} className="text-slate-500 shrink-0 mt-1" />
-                        <span>{item}</span>
+                        <span>{t(item)}</span>
                       </motion.li>
                     ))}
                   </ul>
-                  
-                  <motion.button 
+
+                  <motion.button
                     variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
                     onClick={() => setIsGalleryOpen(true)}
                     className="text-white border-b border-teal-500 pb-1 hover:text-teal-400 transition-colors flex items-center gap-2"
                   >
-                    {pillar.cta} <ArrowRight size={16} />
+                    {t(pillar.cta)} <ArrowRight size={16} />
                   </motion.button>
                 </motion.div>
                 
@@ -583,16 +634,16 @@ function App() {
               }}
             >
               {CONTENT.stats.map((stat, i) => (
-                <motion.div 
-                  key={i} 
+                <motion.div
+                  key={i}
                   variants={{
                     hidden: { opacity: 0, y: 30 },
                     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
                   }}
                   className="text-center p-6 border-r border-slate-800 last:border-0"
                 >
-                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">{stat.value}</div>
-                  <div className="text-slate-500 uppercase tracking-wider text-sm font-medium">{stat.label}</div>
+                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">{t(stat.value)}</div>
+                  <div className="text-slate-500 uppercase tracking-wider text-sm font-medium">{t(stat.label)}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -603,9 +654,9 @@ function App() {
         <section className="py-32 bg-slate-950">
           <div className="container mx-auto px-6">
             <div className="mb-20">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">Complete health oversight.</h2>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">{t('useCases.section.heading')}</h2>
               <p className="text-xl text-slate-400 max-w-2xl">
-                From digitizing crumpled prescriptions to analyzing complex lab results, MedVault handles it all.
+                {t('useCases.section.description')}
               </p>
             </div>
             
@@ -623,8 +674,8 @@ function App() {
                   <div className="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center mb-6 text-teal-500 group-hover:scale-110 group-hover:rotate-3 group-hover:bg-teal-500/10 transition-all duration-300">
                     {renderIcon(useCase.icon)}
                   </div>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-teal-400 transition-colors">{useCase.title}</h3>
-                  <p className="text-slate-400 leading-relaxed">{useCase.description}</p>
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-teal-400 transition-colors">{t(useCase.title)}</h3>
+                  <p className="text-slate-400 leading-relaxed">{t(useCase.description)}</p>
                 </motion.div>
               ))}
             </div>
@@ -635,8 +686,8 @@ function App() {
         <section id="insights" className="py-32 bg-slate-900">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
-               <h2 className="text-4xl md:text-5xl font-bold mb-4">Experience MedVault AI</h2>
-               <p className="text-slate-400 text-lg max-w-2xl mx-auto">Swipe through to explore our intuitive interface designed to put your health data at your fingertips.</p>
+               <h2 className="text-4xl md:text-5xl font-bold mb-4">{t('gallery.heading')}</h2>
+               <p className="text-slate-400 text-lg max-w-2xl mx-auto">{t('gallery.description')}</p>
             </div>
             
             {/* Swipeable Screenshot Gallery */}
@@ -648,35 +699,34 @@ function App() {
         <section id="download" className="py-32 bg-teal-900/20 border-y border-teal-900/30 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-teal-500 to-transparent opacity-50"></div>
           <div className="container mx-auto px-6 text-center relative z-10">
-            <h2 className="text-4xl md:text-6xl font-bold mb-8">Take control of your health data.</h2>
+            <h2 className="text-4xl md:text-6xl font-bold mb-8">{t('download.headline')}</h2>
             <div className="flex justify-center gap-4 mb-8 flex-col sm:flex-row items-center">
-               <a 
-                  href={APK_DOWNLOAD_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-8 py-4 bg-white text-teal-900 font-bold rounded-full hover:bg-teal-50 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center group"
+               <button
+                  onClick={handleDownloadClick}
+                  disabled={isDownloading}
+                  className="px-8 py-4 bg-white text-teal-900 font-bold rounded-full hover:bg-teal-50 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center group disabled:opacity-70 disabled:cursor-not-allowed"
                >
-                 <Download size={20} className="group-hover:animate-bounce" />
-                 Download APK
-               </a>
-               <button 
+                 <Download size={20} className={isDownloading ? "animate-bounce" : "group-hover:animate-bounce"} />
+                 {isDownloading ? (t('download.downloading') || 'Downloading...') : t('download.downloadBtn')}
+               </button>
+               <button
                   onClick={() => setIsWishlistOpen(true)}
                   className="px-8 py-4 border border-teal-500/30 text-white font-bold rounded-full hover:bg-teal-500/10 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center"
                >
-                 Join Waitlist
+                 {t('download.joinWaitlist')}
                </button>
             </div>
-            
+
             <p className="text-slate-400 text-sm mb-8">
-              Version 1.0.3 • Android APK • ~25MB
+              {t('download.version')}
             </p>
-            
+
             <div className="flex flex-wrap justify-center gap-3">
               <span className="px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-sm font-medium">
-                AI Powered
+                {t('download.badges.aiPowered')}
               </span>
               <span className="px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-sm font-medium">
-                HIPAA Compliant
+                {t('download.badges.hipaaCompliant')}
               </span>
             </div>
           </div>

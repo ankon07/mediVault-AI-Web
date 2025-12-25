@@ -1,8 +1,10 @@
 import React from 'react';
 import { CONTENT } from '../constants';
 import { Twitter, Linkedin, Github, Mail } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation();
   const { team, email } = CONTENT.footer; 
 
   return (
@@ -18,13 +20,12 @@ const Footer: React.FC = () => {
                     <span className="text-xl font-bold tracking-tight text-white">MedVault AI</span>
                 </div>
                 <p className="text-slate-400 leading-relaxed text-sm">
-                  Secure medical data infrastructure for the AI era. 
-                  Protecting patient privacy while enabling clinical innovation.
+                  {t('footer.description')}
                 </p>
              </div>
-             
+
              <div className="space-y-2">
-                <p className="text-white font-semibold">{team}</p>
+                <p className="text-white font-semibold">{t(team)}</p>
                 <a 
                   href={`mailto:${email}`} 
                   className="flex items-center gap-2 text-teal-400 hover:text-white transition-colors text-sm"
@@ -49,12 +50,12 @@ const Footer: React.FC = () => {
           
           {CONTENT.footer.links.map((column) => (
             <div key={column.category}>
-              <h4 className="text-white font-semibold mb-6">{column.category}</h4>
+              <h4 className="text-white font-semibold mb-6">{t(column.category)}</h4>
               <ul className="space-y-4">
                 {column.items.map((link) => (
                   <li key={link}>
                     <a href="#" className="text-slate-400 hover:text-teal-400 transition-colors text-sm">
-                      {link}
+                      {t(link)}
                     </a>
                   </li>
                 ))}
@@ -64,7 +65,7 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">{CONTENT.footer.copyright}</p>
+          <p className="text-slate-500 text-sm">{t(CONTENT.footer.copyright)}</p>
           <div className="flex gap-6 text-sm text-slate-500">
              <a href="#" className="hover:text-white transition-colors">Privacy</a>
              <a href="#" className="hover:text-white transition-colors">Terms</a>

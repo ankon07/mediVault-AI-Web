@@ -1,0 +1,265 @@
+{
+  "nav": {
+    "features": "Features",
+    "technology": "Technology",
+    "download": "Download",
+    "insights": "Insights",
+    "about": "About",
+    "contact": "Contact",
+    "latestFromVault": "Latest from vault"
+  },
+  "hero": {
+    "headline": "Your personal medical vault, powered by AI.",
+    "subhead": "Scan prescriptions, analyze lab reports, and manage your health schedule with a privacy-first AI assistant.",
+    "primaryCta": "Get Early Access",
+    "secondaryCta": "View Features"
+  },
+  "pillars": {
+    "scanning": {
+      "title": "Smart Digitization",
+      "subtitle": "From paper to intelligence.",
+      "description": {
+        "0": "Instant camera capture for prescriptions & lab reports.",
+        "1": "Automatic document type detection and cropping.",
+        "2": "Powered by advanced AI for precise extraction."
+      },
+      "cta": "See Scanning Demo"
+    },
+    "management": {
+      "title": "Active Management",
+      "subtitle": "Never miss a dose again.",
+      "description": {
+        "0": "Visual medication timelines and grid views.",
+        "1": "Smart reminders synced with Google Calendar.",
+        "2": "Track frequency, purpose, and purchase history."
+      },
+      "cta": "Explore Scheduling"
+    },
+    "analysis": {
+      "title": "Clinical Insights",
+      "subtitle": "Lab results, demystified.",
+      "description": {
+        "0": "AI analysis of Complete Blood Count (CBC) and reports.",
+        "1": "Instant normal-range comparisons and health summaries.",
+        "2": "Searchable, encrypted history of all your diagnoses."
+      },
+      "cta": "View Analysis Engine"
+    }
+  },
+  "stats": {
+    "0": {
+      "value": "Advanced AI",
+      "label": "Core Model"
+    },
+    "1": {
+      "value": "AES-256",
+      "label": "E2E Encryption"
+    },
+    "2": {
+      "value": "100%",
+      "label": "Privacy First"
+    },
+    "3": {
+      "value": "< 2s",
+      "label": "Analysis Time"
+    }
+  },
+  "useCases": {
+    "section": {
+      "heading": "Complete health oversight.",
+      "description": "From digitizing crumpled prescriptions to analyzing complex lab results, MedVault handles it all."
+    },
+    "prescriptionParser": {
+      "title": "Prescription Parser",
+      "description": "Extract med names, dosages, and instructions instantly from photos."
+    },
+    "labResultAnalyzer": {
+      "title": "Lab Result Analyzer",
+      "description": "Understand complex lab metrics with simple AI explanations."
+    },
+    "medicationTracker": {
+      "title": "Medication Tracker",
+      "description": "Visual grids and timeline views for your daily regimen."
+    },
+    "healthSummaries": {
+      "title": "Health Summaries",
+      "description": "Generate concise summaries of diagnosis documents."
+    },
+    "calendarSync": {
+      "title": "Calendar Sync",
+      "description": "Seamless integration with Google Calendar for reminders."
+    },
+    "secureArchive": {
+      "title": "Secure Archive",
+      "description": "Firebase-backed secure storage for your medical history."
+    }
+  },
+  "gallery": {
+    "categories": {
+      "core": "Core",
+      "intelligence": "Intelligence",
+      "onboarding": "Onboarding"
+    },
+    "heading": "Experience MedVault AI",
+    "description": "Swipe through to explore our intuitive interface designed to put your health data at your fingertips.",
+    "items": {
+      "welcomeScreen": {
+        "title": "Welcome Screen",
+        "description": "Beautiful onboarding experience to get you started."
+      },
+      "homeDashboard": {
+        "title": "Home Dashboard",
+        "description": "Your health hub with quick access to all features."
+      },
+      "smartScan": {
+        "title": "Smart Scan",
+        "description": "Instantly detect and analyze medical documents."
+      },
+      "aiAnalysis": {
+        "title": "AI Analysis",
+        "description": "Deep insights into dermatology and lab reports."
+      },
+      "medicineCabinet": {
+        "title": "Medicine Cabinet",
+        "description": "A clear, visual grid of your active prescriptions."
+      },
+      "medicationDetails": {
+        "title": "Medication Details",
+        "description": "Comprehensive dosage and instruction info."
+      },
+      "dailySchedule": {
+        "title": "Daily Schedule",
+        "description": "Timeline view with smart adherence tracking."
+      },
+      "healthReminders": {
+        "title": "Health Reminders",
+        "description": "Smart notifications for your medication schedule."
+      },
+      "labResults": {
+        "title": "Lab Results",
+        "description": "Understand your CBC metrics with normal ranges."
+      },
+      "reportAnalysis": {
+        "title": "Report Analysis",
+        "description": "AI-powered analysis of your medical reports."
+      },
+      "digitalNotebook": {
+        "title": "Digital Notebook",
+        "description": "Searchable archive of all your medical history."
+      },
+      "healthSummary": {
+        "title": "Health Summary",
+        "description": "Concise summaries of your health conditions."
+      },
+      "calendarSync": {
+        "title": "Calendar Sync",
+        "description": "Seamless integration with Google Calendar."
+      },
+      "secureArchive": {
+        "title": "Secure Archive",
+        "description": "Firebase-backed secure storage for your records."
+      },
+      "profileSettings": {
+        "title": "Profile & Settings",
+        "description": "Manage your account and privacy preferences."
+      }
+    }
+  },
+  "insights": {
+    "section": {
+      "heading": "Health Insights",
+      "viewAll": "View all articles"
+    },
+    "items": {
+      "0": {
+        "title": "Leveraging AI for Medical Extraction",
+        "date": "Dec 02, 2024",
+        "tag": "AI Tech"
+      },
+      "1": {
+        "title": "The Importance of Normal Range Monitoring",
+        "date": "Nov 28, 2024",
+        "tag": "Health"
+      },
+      "2": {
+        "title": "Privacy-First Architecture in Health Apps",
+        "date": "Nov 15, 2024",
+        "tag": "Security"
+      }
+    }
+  },
+  "download": {
+    "headline": "Download MedVault AI",
+    "downloadBtn": "Download Android APK",
+    "downloading": "Downloading...",
+    "joinWaitlist": "Join Waitlist",
+    "version": "Version 1.0.3 • Android APK • ~25MB",
+    "counter": {
+      "downloads": "Downloads"
+    },
+    "badges": {
+      "aiPowered": "AI-Powered",
+      "hipaaCompliant": "HIPAA Compliant"
+    }
+  },
+  "wishlist": {
+    "form": {
+      "heading": "Get Early Access",
+      "description": "MedVault AI is currently in private beta. Join our wishlist to receive the latest APK build directly to your email.",
+      "nameLabel": "Your Name (Optional)",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "Email Address *",
+      "emailPlaceholder": "name@example.com",
+      "submitBtn": "Send me the APK",
+      "submitting": "Sending...",
+      "privacy": "We respect your privacy. No spam, ever."
+    },
+    "success": {
+      "heading": "You're on the list!",
+      "message": "We've received your request. Check your inbox—we'll be sending the APK download link shortly.",
+      "closeBtn": "Back to Site"
+    },
+    "error": {
+      "heading": "Oops! Something went wrong",
+      "tryAgainBtn": "Try Again",
+      "emailDirectlyBtn": "Email Us Directly"
+    }
+  },
+  "footer": {
+    "description": "Secure medical data infrastructure for the AI era. Protecting patient privacy while enabling clinical innovation.",
+    "links": {
+      "app": {
+        "category": "App",
+        "earlyAccess": "Early Access",
+        "roadmap": "Roadmap",
+        "features": "Features",
+        "pricing": "Pricing"
+      },
+      "company": {
+        "category": "Company",
+        "about": "About",
+        "careers": "Careers",
+        "press": "Press",
+        "contact": "Contact"
+      },
+      "legal": {
+        "category": "Legal",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service",
+        "hipaaCompliance": "HIPAA Compliance",
+        "dataSafety": "Data Safety"
+      }
+    },
+    "copyright": "© 2024 MedVault AI. All rights reserved.",
+    "team": "Team MediVault AI"
+  },
+  "common": {
+    "menu": "Menu",
+    "close": "Close",
+    "closeGallery": "Close Gallery"
+  },
+  "languageSwitcher": {
+    "en": "EN",
+    "bn": "বাং"
+  }
+}

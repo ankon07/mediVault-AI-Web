@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { CONTENT } from '../constants';
+import { useTranslation } from 'react-i18next';
 
 interface FeaturesGalleryProps {
   onClose: () => void;
@@ -24,6 +25,8 @@ const itemVariants = {
 };
 
 const FeaturesGallery: React.FC<FeaturesGalleryProps> = ({ onClose }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex flex-col">
       {/* Header */}
@@ -85,15 +88,15 @@ const FeaturesGallery: React.FC<FeaturesGalleryProps> = ({ onClose }) => {
                 {/* Caption */}
                 <div className="text-center max-w-[300px]">
                   <span className={`inline-block px-3 py-1 mb-3 text-xs font-bold uppercase tracking-wider rounded-full border ${
-                    item.category === 'Core' ? 'bg-teal-500/10 border-teal-500/30 text-teal-400' :
-                    item.category === 'Intelligence' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
+                    t(item.category) === t('gallery.categories.core') ? 'bg-teal-500/10 border-teal-500/30 text-teal-400' :
+                    t(item.category) === t('gallery.categories.intelligence') ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
                     'bg-slate-700/30 border-slate-600 text-slate-300'
                   }`}>
-                    {item.category}
+                    {t(item.category)}
                   </span>
-                  <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{t(item.title)}</h3>
                   <p className="text-slate-400 leading-relaxed text-sm">
-                    {item.description}
+                    {t(item.description)}
                   </p>
                 </div>
               </motion.div>
@@ -101,11 +104,11 @@ const FeaturesGallery: React.FC<FeaturesGalleryProps> = ({ onClose }) => {
           </motion.div>
           
           <div className="text-center mt-24 pb-12">
-            <button 
+            <button
               onClick={onClose}
               className="px-8 py-4 border border-slate-700 text-white font-medium rounded-full hover:bg-slate-800 transition-colors"
             >
-              Close Gallery
+              {t('common.closeGallery')}
             </button>
           </div>
 

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import { CONTENT } from '../constants';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 
 // Android-style robot icon component
 const AndroidIcon: React.FC<{ size?: number }> = ({ size = 20 }) => (
@@ -16,7 +18,13 @@ const AndroidIcon: React.FC<{ size?: number }> = ({ size = 20 }) => (
   </svg>
 );
 
-const Navigation: React.FC = () => {
+interface NavigationProps {
+  downloadCount?: number | null;
+  onDownloadClick?: () => void;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ downloadCount = null, onDownloadClick }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -27,6 +35,12 @@ const Navigation: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleDownloadClick = () => {
+    if (onDownloadClick) {
+      onDownloadClick();
+    }
+  };
 
   const scrollToDownload = () => {
     const downloadSection = document.getElementById('download');
@@ -51,23 +65,37 @@ const Navigation: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Download Button with Android Icon */}
-            <button 
-              onClick={scrollToDownload}
-              className="group flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
-              title="Download App"
-            >
-              <span className="hidden sm:block">Download</span>
-              <div className="p-2 rounded-full border border-slate-700 group-hover:bg-green-500/10 group-hover:border-green-500 group-hover:text-green-400 transition-all">
-                <AndroidIcon size={20} />
-              </div>
-            </button>
+            {/* Language Switcher */}
+            <LanguageSwitcher />
 
-            <button 
+            {/* Download Counter and Button */}
+            <div className="flex items-center gap-2">
+              {downloadCount !== null && downloadCount !== undefined && (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-full backdrop-blur-sm">
+                  <div className="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse"></div>
+                  <span className="text-slate-300 text-xs font-medium">
+                    {downloadCount.toLocaleString()}
+                  </span>
+                </div>
+              )}
+              
+              <button
+                onClick={handleDownloadClick}
+                className="group flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+                title="Download App"
+              >
+                <span className="hidden sm:block">{t('nav.download')}</span>
+                <div className="p-2 rounded-full border border-slate-700 group-hover:bg-green-500/10 group-hover:border-green-500 group-hover:text-green-400 transition-all">
+                  <AndroidIcon size={20} />
+                </div>
+              </button>
+            </div>
+
+            <button
               onClick={() => setIsOpen(true)}
               className="group flex items-center gap-3 text-sm font-medium text-slate-300 hover:text-white transition-colors"
             >
-              <span className="hidden sm:block">Menu</span>
+              <span className="hidden sm:block">{t('common.menu')}</span>
               <div className="p-2 rounded-full border border-slate-700 group-hover:bg-teal-500/10 group-hover:border-teal-500 transition-all">
                 <Menu size={20} />
               </div>
@@ -113,18 +141,18 @@ const Navigation: React.FC = () => {
                     transition={{ delay: 0.1 + index * 0.1 }}
                     className="block text-5xl md:text-7xl font-bold text-slate-400 hover:text-teal-400 transition-colors"
                   >
-                    {item.label}
+                    {t(item.label)}
                   </motion.a>
                 ))}
               </div>
-              
+
               <div className="hidden lg:block space-y-8 p-12 bg-slate-900 rounded-3xl border border-slate-800">
-                <h3 className="text-2xl font-light text-white">Latest from the vault</h3>
+                <h3 className="text-2xl font-light text-white">{t('nav.latestFromVault')}</h3>
                 <div className="space-y-6">
-                    {CONTENT.insights.slice(0,2).map((insight) => (
+                    {CONTENT.insights.slice(0,2).map((insight, idx) => (
                         <div key={insight.title} className="group cursor-pointer">
-                            <p className="text-teal-500 text-sm mb-1">{insight.tag}</p>
-                            <h4 className="text-xl text-slate-300 group-hover:text-white transition-colors">{insight.title}</h4>
+                            <p className="text-teal-500 text-sm mb-1">{t(`insights.items.${idx}.tag`)}</p>
+                            <h4 className="text-xl text-slate-300 group-hover:text-white transition-colors">{t(`insights.items.${idx}.title`)}</h4>
                         </div>
                     ))}
                 </div>
