@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const RECIPIENT_EMAIL = 'ankonahamed@gmail.com';
 
 // APK Download URL
-const APK_DOWNLOAD_URL = 'https://github.com/ankon07/medvault-ai/releases/download/v1.0.3/medivault-ai.apk';
+const APK_DOWNLOAD_URL = 'https://github.com/ankon07/medvault-ai/releases/download/v1.0.3/medivault-v1.0.0.apk';
 
 // App Screenshots for the carousel
 const APP_SCREENSHOTS = [
