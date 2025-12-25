@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const RECIPIENT_EMAIL = 'ankonahamed@gmail.com';
 
 // APK Download URL
-const APK_DOWNLOAD_URL = 'https://github.com/ankon07/medvault-ai/releases/download/v1.0.2/medivault-ai.apk';
+const APK_DOWNLOAD_URL = 'https://github.com/ankon07/medvault-ai/releases/download/v1.0.3/medivault-ai.apk';
 
 // App Screenshots for the carousel
 const APP_SCREENSHOTS = [
@@ -668,7 +668,7 @@ function App() {
             </div>
             
             <p className="text-slate-400 text-sm mb-8">
-              Version 1.0.2 • Android APK • ~25MB
+              Version 1.0.3 • Android APK • ~25MB
             </p>
             
             <div className="flex flex-wrap justify-center gap-3">
